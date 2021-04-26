@@ -124,21 +124,4 @@ if __name__ == "__main__":
     # whether RLlib was able to learn it.
     # ...
 
-    # 7.
-    # Exercise No2:
-    # Try learning our environment using Ray tune.run and a simple
-    # hyperparameter grid_search over 2 different learning rates
-    # (pick your own values) and 2 different `train_batch_size` settings
-    # (use 2000 and 4000). Also make RLlib use a [64, 64] dense layer
-    # stack as the NN model.
-
-    # 7.a
-    # Solution:
-    tune.run("PPO", config={
-        "lr": tune.grid_search([0.001, 0.002]),
-        "train_batch_size": tune.grid_search([2000, 4000]),
-        "model": {
-            "fcnet_hiddens": [64, 64],
-        },
-    }, stop=stop, verbose=2, checkpoint_at_end=True)
-
+    # 7) -> exercise_2.py: Exercise #2.

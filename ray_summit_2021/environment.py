@@ -1,5 +1,5 @@
 import gym
-from gym.spaces import Discrete
+from gym.spaces import Discrete, MultiDiscrete
 import numpy as np
 import random
 
@@ -17,7 +17,8 @@ class MultiAgentArena(MultiAgentEnv):  # gym.Env
 
         # 0=up, 1=right, 2=down, 3=left.
         self.action_space = Discrete(4)
-        self.observation_space = Discrete(self.width * self.height)
+        self.observation_space = MultiDiscrete([self.width * self.height,
+                                                self.width * self.height])
         # End an episode after this many timesteps.
         self.timestep_limit = config.get("ts", 100)
         # Reset env.
@@ -58,11 +59,14 @@ class MultiAgentArena(MultiAgentEnv):  # gym.Env
         return obs, reward, done, {}
 
     def get_obs(self):
-        obs1 = self.agent1_pos[0] * self.width + \
-               (self.agent1_pos[1] % self.width)
-        obs2 = self.agent2_pos[0] * self.width + \
-               (self.agent2_pos[1] % self.width)
-        return {"agent1": obs1, "agent2": obs2}
+        ag1_discrete_pos = self.agent1_pos[0] * self.width + \
+            (self.agent1_pos[1] % self.width)
+        ag2_discrete_pos = self.agent2_pos[0] * self.width + \
+            (self.agent2_pos[1] % self.width)
+        return {
+            "agent1": np.array([ag1_discrete_pos, ag2_discrete_pos]),
+            "agent2": np.array([ag2_discrete_pos, ag1_discrete_pos]),
+        }
 
     def move(self, coords, action, is_agent1):
         orig_coords = coords[:]
