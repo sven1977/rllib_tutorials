@@ -117,11 +117,40 @@ if __name__ == "__main__":
     )
     print(results)
 
-    # 6) Using Anyscale's infinite laptop to start an experiment.
+    # 6) Going multiagent: Our experiment is ill-configured b/c both
+    # agents, which should behave differently due to their different
+    # tasks and reward functions, learn the same policy.
+    # Let's fix this and introduce the "multiagent" API.
+    # 6.1.) Define an agent->policy mapping function.
+    def policy_mapping_fn(agent):
+        return "pol1" if agent == "agent1" else "pol2"
+
+    # 6.2.) Define details for our two policies.
+    #TODO: coding Sven: Make it possible to not need obs/action spaces
+    #  if they are the default anyways.
+    observation_space = rllib_trainer.get_policy().observation_space
+    action_space = rllib_trainer.get_policy().action_space
+    # Btw, the above is equivalent to saying:
+    # >>> rllib_trainer.get_policy("default_policy").obs/action_space
+    policies = {
+        "pol1": (None, observation_space, action_space, {}),
+        "pol2": (None, observation_space, action_space, {}),
+    }
+    # 6.3) Adding the above to our config.
+    config.update({
+        "multiagent": {
+            "policies": policies,
+            "policy_mapping_fn": policy_mapping_fn,
+        },
+    })
+    # 6.4) Try again.
+    tune.run("PPO", config=config, stop=stop)
+
+    # 7) Using Anyscale's infinite laptop to start an experiment.
     # We will try to learn a more complex multi-agent environment
     # using a Griddly multi-agent environment.
     # We will check on the results later in this tutorial to see,
     # whether RLlib was able to learn it.
     # ...
 
-    # 7) -> exercise_2.py: Exercise #2.
+    # 8) -> exercise_2.py: Exercise #2.
