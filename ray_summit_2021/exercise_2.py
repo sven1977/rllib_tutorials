@@ -1,33 +1,15 @@
-# Exercise #2:
-# ============
-# Try learning our environment using Ray tune.run and a simple
-# hyperparameter grid_search over 2 different learning rates
-# (pick your own values) and 2 different `train_batch_size` settings
-# (use 2000 and 4000). Also make RLlib use a [64, 64] dense layer
-# stack as the NN model.
-# Good luck! :)
+# Solution to Exercise #2:
 
+# Update our config and set it up for 2x tune grid-searches (leading to 4 parallel trials in total).
+config.update({
+    "lr": tune.grid_search([0.0001, 0.0005]),
+    "train_batch_size": tune.grid_search([2000, 3000]),
+    "num_envs_per_worker": 10,
+    # Change our model to be simpler.
+    "model": {
+        "fcnet_hiddens": [128, 128],
+    },
+})
 
-if __name__ == "__main__":
-
-    # Solution:
-    from ray import tune
-    from environment import MultiAgentArena
-
-    stop = {
-        "episode_reward_mean": 100.0,
-        "training_iteration": 50,
-    }
-
-    tune.run("PPO", config={
-        "env": MultiAgentArena,
-        # Test 2 reasonable learning rates.
-        "lr": tune.grid_search([0.001, 0.002]),
-        # # Test 2 reasonable batch sizes.
-        "train_batch_size": tune.grid_search([2000, 4000]),
-        # Change RLlib's default model's fully connected layer stack
-        # to [64, 64] (from the default, which is [256, 256]).
-        "model": {
-            "fcnet_hiddens": [64, 64],
-        },
-    }, stop=stop, verbose=2, checkpoint_at_end=True)
+# Run the experiment.
+tune.run("PPO", config=config, stop={"episode_reward_mean": -25.0, "training_iteration": 100})
