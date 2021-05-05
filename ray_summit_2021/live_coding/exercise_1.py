@@ -8,8 +8,12 @@ done = {"__all__": False}
 return_ag1 = return_ag2 = 0.0
 num_episodes = 0
 while num_episodes < 5:
-    action = dummy_trainer.compute_action(obs)
-    obs, rewards, done, _ = env.step(action)
+    # Compute actions separately for each agent.
+    action1 = dummy_trainer.compute_action(obs["agent1"])
+    action2 = dummy_trainer.compute_action(obs["agent2"])
+
+    # Send the action-dict to the env.
+    obs, rewards, done, _ = env.step({"agent1": action1, "agent2": action2})
     return_ag1 += rewards["agent1"]
     return_ag2 += rewards["agent2"]    
     if done["__all__"]:
