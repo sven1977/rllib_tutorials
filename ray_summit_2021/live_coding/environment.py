@@ -13,7 +13,7 @@ def _init(self, config):
     self.reset()
 
 def _reset(self):
-    # Row-major coords!
+    # Row-major coords.
     self.agent1_pos = [0, 0]
     self.agent2_pos = [self.height - 1, self.width - 1]
     # Reset agent1's visited states.
@@ -27,8 +27,10 @@ def _step(self, action: dict):
     # increase our time steps counter by 1.
     self.timesteps += 1
 
-    # Determine, who is allowed to move first (50:50).
-    if random.random() > 0.5:
+    # Determine, who is allowed to move first.
+    agent1_first = random.random() > 0.5
+
+    if agent1_first:
         events = self._move(self.agent1_pos, action["agent1"], is_agent1=True)
         events |= self._move(self.agent2_pos, action["agent2"], is_agent1=False)
     else:

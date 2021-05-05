@@ -1,14 +1,9 @@
 pol = rllib_trainer.get_policy()
 
-# We can get the policy inside the Trainer like so:
-pol = rllib_trainer.get_policy()
 print(f"Policy: {pol}")
-# The Policy object has an observation space and an action space.
 print(f"Observation-space: {pol.observation_space}")
 print(f"Action-space: {pol.action_space}")
-# It also comes with an action distribution class ...
 print(f"Action distribution class: {pol.dist_class}")
-# ... and a (neural network) model.
 print(f"Model: {pol.model}")
 
 # Create a fake numpy B=1 (single) observation consisting of both agents positions ("one-hot'd" and "concat'd").
