@@ -1,5 +1,3 @@
-pol = rllib_trainer.get_policy()
-
 # We can get the policy inside the Trainer like so:
 pol = rllib_trainer.get_policy()
 print(f"Policy: {pol}")

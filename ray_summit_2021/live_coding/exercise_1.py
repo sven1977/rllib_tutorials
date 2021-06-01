@@ -21,9 +21,10 @@ while num_episodes < 5:
         num_episodes += 1
         return_ag1 = return_ag2 = 0.0
         obs = env.reset()
-    # Optional:
-    env.render()
 
-    import time
+    # Optional: render.
+    env.render()
     time.sleep(0.15)
 
+# Shutdown the viewer (becomes unstable otherwise).
+env.viewer.close()

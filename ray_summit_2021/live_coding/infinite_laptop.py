@@ -1,18 +1,14 @@
-import anyscale
-
-#anyscale.project_dir("/Users/sven/.anyscale/scratch_sven/")
-anyscale.connect()
-
 import ray
-from ray.rllib.agents.ppo import PPOTrainer
+#import anyscale
 
-assert ray.is_initialized(), "ERROR!"
+ray.client("anyscale://tutorial_project").connect()
 
-from gym.envs.classic_control.cartpole import CartPoleEnv
-from ray.rllib.examples.env.random_env import RandomEnv
-class MyEnv(CartPoleEnv):
-    def __init__(self, config=None):
-        super().__init__()
+from ray.rllib.examples.env.gpu_requiring_env import GPURequiringEnv #random_env import RandomEnv
+from ray import tune
 
-trainer = PPOTrainer(env=RandomEnv)
-trainer.train()
+config={
+    "env": GPURequiringEnv,
+    "framework": "torch",
+}
+#ray.init()
+tune.run("PPO", config=config, stop={"training_iteration": 1})

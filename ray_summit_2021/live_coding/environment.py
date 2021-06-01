@@ -29,6 +29,7 @@ def _step(self, action: dict):
 
     # Determine, who is allowed to move first (50:50).
     if random.random() > 0.5:
+        # events = [collision|new_field]
         events = self._move(self.agent1_pos, action["agent1"], is_agent1=True)
         events |= self._move(self.agent2_pos, action["agent2"], is_agent1=False)
     else:
@@ -37,8 +38,8 @@ def _step(self, action: dict):
 
     # Determine rewards based on the collected events:
     rewards = {
-        "agent1": -1.0 if "bumped" in events else 1.0 if "new" in events else -0.5,
-        "agent2": 1.0 if "bumped" in events else -0.1,
+        "agent1": -1.0 if "collision" in events else 1.0 if "new_field" in events else -0.5,
+        "agent2": 1.0 if "collision" in events else -0.1,
     }
     # Get observations (based on new agent positions).
     obs = self._get_obs()
