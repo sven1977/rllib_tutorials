@@ -4,7 +4,7 @@
 config.update({
     "lr": tune.grid_search([0.0001, 0.0005]),
     "train_batch_size": tune.grid_search([2000, 3000]),
-    "num_envs_per_worker": 10,
+    "num_envs_per_worker": 5,
     # Change our model to be simpler.
     "model": {
         "fcnet_hiddens": [128, 128],

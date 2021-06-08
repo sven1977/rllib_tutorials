@@ -7,7 +7,7 @@ obs = env.reset()
 done = {"__all__": False}
 return_ag1 = return_ag2 = 0.0
 num_episodes = 0
-while num_episodes < 5:
+while num_episodes < 3:
     # Compute actions separately for each agent.
     action1 = dummy_trainer.compute_action(obs["agent1"])
     action2 = dummy_trainer.compute_action(obs["agent2"])
@@ -24,7 +24,7 @@ while num_episodes < 5:
 
     # Optional: render.
     env.render()
-    time.sleep(0.15)
+    time.sleep(0.05)
 
 # Shutdown the viewer (becomes unstable otherwise).
 env.viewer.close()

@@ -1,17 +1,3 @@
-def _init(self, config):
-    config = config or {}
-    self.width = config.get("width", 10)
-    self.height = config.get("height", 10)
-
-    # 0=up, 1=right, 2=down, 3=left.
-    self.action_space = Discrete(4)
-    self.observation_space = MultiDiscrete([self.width * self.height,
-                                            self.width * self.height])
-    # End an episode after this many timesteps.
-    self.timestep_limit = config.get("ts", 100)
-    # Reset env.
-    self.reset()
-
 def _reset(self):
     # Row-major coords!
     self.agent1_pos = [0, 0]
