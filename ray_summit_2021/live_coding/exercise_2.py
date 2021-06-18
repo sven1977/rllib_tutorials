@@ -12,4 +12,10 @@ config.update({
 })
 
 # Run the experiment.
-experiment_analysis = tune.run("PPO", config=config, stop={"episode_reward_mean": 15.0, "training_iteration": 100})
+analysis = tune.run(
+    "PPO",
+    config=config,
+    stop={"episode_reward_mean": 15.0, "training_iteration": 100},
+    checkpoint_freq=10,
+    checkpoint_at_end=True,
+)

@@ -24,7 +24,7 @@ while num_episodes < 3:
 
     # Optional: render.
     env.render()
-    time.sleep(0.05)
+    time.sleep(0.1)
 
 # Shutdown the viewer (becomes unstable otherwise).
 env.viewer.close()
