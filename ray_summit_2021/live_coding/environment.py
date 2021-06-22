@@ -41,3 +41,53 @@ def _step(self, action: dict):
     }
 
     return obs, rewards, dones, {}
+
+# Optionally: Add `render` method returning some img.
+def render(self, mode=None):
+    #return np.random.randint(0, 256, size=(300, 400, 3), dtype=np.uint8)
+    field_size = 40
+
+    if not hasattr(self, "viewer"):
+        from gym.envs.classic_control import rendering
+        self.viewer = Viewer(400, 400)
+        self.fields = {}
+        # Add our grid, and the two agents to the viewer.
+        for i in range(self.width):
+            l = i * field_size
+            r = l + field_size
+            for j in range(self.height):
+                b = 400 - j * field_size - field_size
+                t = b + field_size
+                field = rendering.PolyLine([(l, b), (l, t), (r, t), (r, b)], close=True)
+                field.set_color(.0, .0, .0)
+                field.set_linewidth(1.0)
+                self.fields[(j, i)] = field
+                self.viewer.add_geom(field)
+
+        agent1 = rendering.make_circle(radius=field_size // 2 - 4)
+        agent1.set_color(.0, 0.8, 0.1)
+        self.agent1_trans = rendering.Transform()
+        agent1.add_attr(self.agent1_trans)
+        agent2 = rendering.make_circle(radius=field_size // 2 - 4)
+        agent2.set_color(.5, 0.1, 0.1)
+        self.agent2_trans = rendering.Transform()
+        agent2.add_attr(self.agent2_trans)
+        self.viewer.add_geom(agent1)
+        self.viewer.add_geom(agent2)
+
+    # Mark those fields green that have been covered by agent1,
+    # all others black.
+    for i in range(self.width):
+        for j in range(self.height):
+            self.fields[(j, i)].set_color(.0, .0, .0)
+            self.fields[(j, i)].set_linewidth(1.0)
+    for (j, i) in self.agent1_visited_fields:
+        self.fields[(j, i)].set_color(.1, .5, .1)
+        self.fields[(j, i)].set_linewidth(5.0)
+
+    # Edit the pole polygon vertex
+    self.agent1_trans.set_translation(self.agent1_pos[1] * field_size + field_size / 2, 400 - (self.agent1_pos[0] * field_size + field_size / 2))
+    self.agent2_trans.set_translation(self.agent2_pos[1] * field_size + field_size / 2, 400 - (self.agent2_pos[0] * field_size + field_size / 2))
+
+    return self.viewer.render(return_rgb_array=True)#TODO mode == 'rgb_array')
+
