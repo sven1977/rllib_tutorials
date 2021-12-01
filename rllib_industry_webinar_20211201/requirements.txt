@@ -1,0 +1,10 @@
+ray[rllib]
+jupyter
+tblib
+fastapi
+uvicorn
+anyscale
+requests
+torch
+tensorflow
+gsutil
