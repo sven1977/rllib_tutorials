@@ -5,7 +5,7 @@
 ```
 $ conda create -n rllib_tutorial python=3.9
 $ conda activate rllib_tutorial
-$ pip install "ray[rllib,serve]" recsim jupyterlab tensorflow torch
+$ pip install "ray[rllib,serve]" recsim jupyterlab tensorflow torch sklearn
 
 $ pip install grpcio  # <- Mac only
 $ pip install pywin32  # <- Win10 only
